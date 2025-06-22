@@ -10,5 +10,9 @@
         <module name="oauth.oauth.main" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="oauth.oauth.main~1" target="17" />
+      <module name="oauth.oauth.test~1" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
