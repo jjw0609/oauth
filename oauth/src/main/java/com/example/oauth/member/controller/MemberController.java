@@ -2,8 +2,8 @@ package com.example.oauth.member.controller;
 
 import com.example.oauth.common.auth.JwtTokenProvider;
 import com.example.oauth.member.domain.Member;
-import com.example.oauth.member.dto.MemberCreateDto;
-import com.example.oauth.member.dto.MemberLoginDto;
+import com.example.oauth.member.dto.*;
+import com.example.oauth.member.service.GoogleService;
 import com.example.oauth.member.service.MemberService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +24,7 @@ public class MemberController {
     private static final Logger log = LoggerFactory.getLogger(MemberController.class);
     private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final GoogleService googleService;
 
     public MemberController(MemberService memberService, JwtTokenProvider jwtTokenProvider) {
         this.memberService = memberService;
@@ -50,5 +51,18 @@ public class MemberController {
         loginInfo.put("token", jwtToken);
 
         return new ResponseEntity<>(jwtToken, HttpStatus.OK);
+    }
+
+    @PostMapping("/google/doLogin")
+    public ResponseEntity<?> googleLogin(@RequestBody RedirectDto redirectDto) {
+        //accesstoken 발급
+        AccessTokenDto accessTokenDto = googleService.getAccessToken();
+
+        //사용자 정보 얻기
+        GoogleProfileDto googleProfileDto = googleService.getGoogleProfile(accessTokenDto.getAccess_token());
+
+        //회원가입이 되어 있지 않다면 회원
+
+        //회원가입돼 있는 회원이라면 토큰 발급
     }
 }
