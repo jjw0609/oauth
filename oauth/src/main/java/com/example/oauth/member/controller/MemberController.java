@@ -2,6 +2,7 @@ package com.example.oauth.member.controller;
 
 import com.example.oauth.common.auth.JwtTokenProvider;
 import com.example.oauth.member.domain.Member;
+import com.example.oauth.member.domain.SocialType;
 import com.example.oauth.member.dto.*;
 import com.example.oauth.member.service.GoogleService;
 import com.example.oauth.member.service.MemberService;
@@ -50,7 +51,7 @@ public class MemberController {
         loginInfo.put("id", member.getId());
         loginInfo.put("token", jwtToken);
 
-        return new ResponseEntity<>(jwtToken, HttpStatus.OK);
+        return new ResponseEntity<>(loginInfo, HttpStatus.OK);
     }
 
     @PostMapping("/google/doLogin")
@@ -62,7 +63,18 @@ public class MemberController {
         GoogleProfileDto googleProfileDto = googleService.getGoogleProfile(accessTokenDto.getAccess_token());
 
         //회원가입이 되어 있지 않다면 회원
+        Member originalMember = memberService.getMemberBySocialId(googleProfileDto.getSub());
+        if(originalMember == null) {
+            originalMember = memberService.createOauth(googleProfileDto.getSub(), googleProfileDto.getEmail(), SocialType.GOOGLE);
+        }
 
         //회원가입돼 있는 회원이라면 토큰 발급
+        String jwtToken = jwtTokenProvider.createToken(originalMember.getEmail(), originalMember.getRole().toString());
+
+        Map<String, Object> loginInfo = new HashMap<>();
+        loginInfo.put("id", originalMember.getId());
+        loginInfo.put("token", jwtToken);
+
+        return new ResponseEntity<>(loginInfo, HttpStatus.OK);
     }
 }
