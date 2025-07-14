@@ -15,3 +15,9 @@ spring:
 jwt:
   secret: b2F1dGhzZXJ2ZXJzZWNyZXRhY2Nlc3N0b2tlbm9hdXRoc2VydmVyc2VjcmV0YWNjZXNzdG9rZW5vYXV0aHNlcnZlcnNlY3JldGFjY2Vzc3Rva2Vu
   expiration: 3000 #분단위
+
+oauth:
+  google:
+    client-id: 772560812815-7ejeu9caasoajpi2u8sc70ao2nrt94ut.apps.googleusercontent.com
+    client-secret:
+    redirect-uri: http://localhost:3000/oauth/google/redirect
