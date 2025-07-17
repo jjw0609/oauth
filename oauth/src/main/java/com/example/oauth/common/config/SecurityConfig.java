@@ -42,7 +42,7 @@ public class SecurityConfig {
                 //세션 방식을 비활성화
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 //특정 URL패턴에 대해서는 인증처리(Authentication 객체 생성) 제외
-                .authorizeHttpRequests(a -> a.requestMatchers("/member/create", "/member/doLogin"))
+                .authorizeHttpRequests(a -> a.requestMatchers("/member/create", "/member/doLogin", "/member/google/doLogin", "/member/kakao/doLogin"))
                 //UsernamePasswordAuthenticationFilter 클래스에서 form 로그인 인증을 처리
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

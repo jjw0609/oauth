@@ -27,9 +27,10 @@ public class MemberController {
     private final JwtTokenProvider jwtTokenProvider;
     private final GoogleService googleService;
 
-    public MemberController(MemberService memberService, JwtTokenProvider jwtTokenProvider) {
+    public MemberController(MemberService memberService, JwtTokenProvider jwtTokenProvider, GoogleService googleService) {
         this.memberService = memberService;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.googleService = googleService;
     }
 
     @PostMapping("/create")

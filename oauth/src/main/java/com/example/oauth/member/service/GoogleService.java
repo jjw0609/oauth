@@ -36,21 +36,22 @@ public class GoogleService {
         params.add("redirect_uri", googleRedirectUri);
         params.add("grant_type", "authorization_code");
 
-        ResponseEntity<String> response = restClient.post()
+        ResponseEntity<AccessTokenDto> response = restClient.post()
                 .uri("https://oauth2.googleapis.com/token")
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 //?code=xxx&client_id=yyy&
                 .body(params)
                 //retrieve: 응답 body값만을 추출
                 .retrieve()
-                .toEntity(String.class);
+                .toEntity(AccessTokenDto.class);
 
-        System.out.println("응답 JSON " + response.getBody());
+        System.out.println("응답 accesstoken JSON " + response.getBody());
 
-        return null;
+        return response.getBody();
     }
 
     public GoogleProfileDto getGoogleProfile(String token) {
-
+        System.out.println("token : " + token);
+        return null;
     }
 }
