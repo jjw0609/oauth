@@ -57,7 +57,10 @@ export default {
       googleClientId: '772560812815-7ejeu9caasoajpi2u8sc70ao2nrt94ut.apps.googleusercontent.com',
       googleRedirectUrl: 'http://localhost:3000/oauth/google/redirect',
       // openid는 요청하지 않아도 기본적으로 제공. email과 profile은 요청 시 제공
-      googleScope: 'openid email profile'
+      googleScope: 'openid email profile',
+      kakaoUrl: 'https://kauth.kakao.com/oauth/authorize',
+      kakaoClientId: '28cee171b02cbf14c69edcbd801edb97',
+      kakaoRedirectUrl: 'http://localhost:3000/oauth/kakao/redirect',
     }
   },
   methods: {
@@ -81,7 +84,8 @@ export default {
     },
 
     kakaoLogin() {
-
+      const auth_uri = `${this.kakaoUrl}?client_id=${this.kakaoClientId}&redirect_uri=${this.kakaoRedirectUrl}&response_type=code`;
+      window.location.href = auth_uri;
     }
   }
 }

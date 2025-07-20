@@ -1,6 +1,6 @@
 <template>
   <div>
-    구글 로그인 진행중...
+    카카오 로그인 진행중...
   </div>
 </template>
 
@@ -9,12 +9,12 @@ import axios from "axios";
 
 export default {
   created() {
-    const code = new URL(window.location.href).searchParams.get('code');
-    this.sendCodeToServer(code);
+    // const code = new URL(window.location.href).searchParams.get('code');
+    // this.sendCodeToServer(code);
   },
   methods: {
     async sendCodeToServer(code) {
-      const response = await axios.post('http://localhost:8080/member/google/doLogin', {code});
+      const response = await axios.post('http://localhost:8080/member/kakao/doLogin', {code});
       const token = response.data.totken;
       localStorage.setItem('token', token);
       window.location.href = '/';
