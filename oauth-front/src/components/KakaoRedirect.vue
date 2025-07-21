@@ -9,8 +9,8 @@ import axios from "axios";
 
 export default {
   created() {
-    // const code = new URL(window.location.href).searchParams.get('code');
-    // this.sendCodeToServer(code);
+    const code = new URL(window.location.href).searchParams.get('code');
+    this.sendCodeToServer(code);
   },
   methods: {
     async sendCodeToServer(code) {

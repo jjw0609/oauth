@@ -5,6 +5,7 @@ import com.example.oauth.member.domain.Member;
 import com.example.oauth.member.domain.SocialType;
 import com.example.oauth.member.dto.*;
 import com.example.oauth.member.service.GoogleService;
+import com.example.oauth.member.service.KakaoService;
 import com.example.oauth.member.service.MemberService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,11 +27,13 @@ public class MemberController {
     private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;
     private final GoogleService googleService;
+    private final KakaoService kakaoService;
 
-    public MemberController(MemberService memberService, JwtTokenProvider jwtTokenProvider, GoogleService googleService) {
+    public MemberController(MemberService memberService, JwtTokenProvider jwtTokenProvider, GoogleService googleService, KakaoService kakaoService) {
         this.memberService = memberService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.googleService = googleService;
+        this.kakaoService = kakaoService;
     }
 
     @PostMapping("/create")
@@ -70,6 +73,26 @@ public class MemberController {
         }
 
         //회원가입돼 있는 회원이라면 토큰 발급
+        String jwtToken = jwtTokenProvider.createToken(originalMember.getEmail(), originalMember.getRole().toString());
+
+        Map<String, Object> loginInfo = new HashMap<>();
+        loginInfo.put("id", originalMember.getId());
+        loginInfo.put("token", jwtToken);
+
+        return new ResponseEntity<>(loginInfo, HttpStatus.OK);
+    }
+
+    @PostMapping("/kakao/doLogin")
+    public ResponseEntity<?> kakaoLogin(@RequestBody RedirectDto redirectDto) {
+        AccessTokenDto accessTokenDto = kakaoService.getAccessToken(redirectDto.getCode());
+
+        KakaoProfileDto kakaoProfileDto = kakaoService.getKakaoProfile(accessTokenDto.getAccess_token());
+
+        Member originalMember = memberService.getMemberBySocialId(kakaoProfileDto.getSub());
+        if(originalMember == null) {
+            originalMember = memberService.createOauth(kakaoProfileDto.getSub(), kakaoProfileDto.getEmail(), SocialType.KAKAO);
+        }
+
         String jwtToken = jwtTokenProvider.createToken(originalMember.getEmail(), originalMember.getRole().toString());
 
         Map<String, Object> loginInfo = new HashMap<>();
